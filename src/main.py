@@ -1,7 +1,11 @@
-from Camera import Camera
 from Object import Object
 from Scene import Scene
-import Transforms
 
 if __name__ == '__main__':
-    pass
+    s = Scene()
+
+    obj1 = Object('./3d-obj-examples/coarseTri.fandiskAuto.obj')
+    s.add_object(obj1)
+
+    obj2 = Object('./3d-obj-examples/coarseTri.egea1.obj')
+    s.add_object(obj2)
