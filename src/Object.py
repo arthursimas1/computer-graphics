@@ -1,7 +1,14 @@
 class Object:
     def __init__(self, path: str):
+        """
+        3D Object constructor.
+
+        :param path: Filepath to an .obj 3D object.
+        """
+
         self.vertexes = []
         self.faces = []
+
         with open(path, 'r') as fp:
             for line in fp.readlines():
                 line_type, *elements = line.split()

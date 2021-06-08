@@ -7,6 +7,13 @@ import math
 
 class Camera(wx.Panel):
     def __init__(self, frame, scene):
+        """
+        Camera constructor.
+
+        :param frame: wx.Frame instance to insert a wx.Panel.
+        :param scene: Scene instance where the camera should be placed.
+        """
+
         wx.Panel.__init__(self, frame)
         self.Bind(wx.EVT_PAINT, self.on_paint)
         self.Bind(wx.EVT_SIZE, self.on_size)
