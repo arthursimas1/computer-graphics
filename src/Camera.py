@@ -17,6 +17,9 @@ class Camera(wx.Panel):
                         [0, 1, 0],
                         [0, 0, 1]]
 
+        for obj in self.scene.objects:
+            obj.vertexes.sort(key=lambda v: v[2])
+
     def on_size(self, evt):
         self.Refresh()
 
@@ -30,9 +33,12 @@ class Camera(wx.Panel):
     def get_bitmap(self, w, h):
         data = np.zeros((h, w, 3), np.uint8)
 
-        for i in range(w):
-            data[int(math.cos(i / 20) * 20) + h // 2][i] = 90
-            data[int(math.sin(i / 20) * 20) + h // 2][i] = 255
+        for obj in self.scene.objects:
+            for vt in obj.vertexes:
+                # data[Y][X]
+                vt = Transforms.scale(vt, 40)[:-1]
+                vt = Transforms.translate(list(map(lambda x: x[0], vt)), 50, -400, 0)[:-1]
+                data[round(vt[1][0])][round(vt[0][0])] = min(round(vt[2][0]), 255)
 
         bmp = wx.Bitmap.FromBuffer(w, h, data)
         return bmp
