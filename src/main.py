@@ -17,6 +17,9 @@ if __name__ == '__main__':
     frame = wx.Frame(None, title=f'Computer Graphics Test')
 
     cam = Camera(frame, s)
+    cam.rotate_y(45)
+    cam.rotate_z(45)
+    cam.translate(100, -100, 0)
 
     frame.Show()
     app.MainLoop()
