@@ -13,7 +13,6 @@ if __name__ == '__main__':
     # obj2 = Object('./3d-obj-examples/coarseTri.egea1.obj')
     # s.add_object(obj2)
 
-    app = wx.App()
     frame = wx.Frame(None, title=f'Computer Graphics Test')
 
     cam = Camera(frame, s)
@@ -22,4 +21,4 @@ if __name__ == '__main__':
     cam.translate(100, -100, 0)
 
     frame.Show()
-    app.MainLoop()
+    Scene.main_loop()

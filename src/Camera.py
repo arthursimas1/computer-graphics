@@ -5,6 +5,8 @@ import math
 
 
 class Camera(wx.Panel):
+    count = 0
+
     def __init__(self, frame, scene):
         """
         Camera constructor.
@@ -12,6 +14,9 @@ class Camera(wx.Panel):
         :param frame: wx.Frame instance to insert a wx.Panel.
         :param scene: Scene instance where the camera should be placed.
         """
+
+        Camera.count += 1
+        self.id = Camera.count
 
         wx.Panel.__init__(self, frame)
         self.Bind(wx.EVT_PAINT, self.on_paint)
