@@ -21,6 +21,7 @@ class Camera(wx.Panel):
         wx.Panel.__init__(self, frame)
         self.Bind(wx.EVT_PAINT, self.on_paint)
         self.Bind(wx.EVT_SIZE, self.on_size)
+        self.Bind(wx.EVT_KEY_DOWN, self.key_down)
         frame.Show()
 
         self.scene = scene
@@ -32,6 +33,40 @@ class Camera(wx.Panel):
                                  [0., 1., 0., 0.],
                                  [0., 0., 1., 0.],
                                  [0., 0., 0., 1.]])
+
+        self.step_delta_constant = 10
+        self.step_deg_constant = 1
+
+    def key_down(self, evt):
+        mod = evt.GetModifiers()
+        key = evt.GetKeyCode()
+
+        if mod == wx.MOD_NONE:
+            if key == wx.WXK_RIGHT:
+                self.translate(self.step_delta_constant, 0, 0)
+            elif key == wx.WXK_LEFT:
+                self.translate(-self.step_delta_constant, 0, 0)
+            elif key == wx.WXK_UP:
+                self.translate(0, 0, self.step_delta_constant)
+            elif key == wx.WXK_DOWN:
+                self.translate(0, 0, -self.step_delta_constant)
+        elif mod == wx.MOD_SHIFT and key == wx.WXK_UP:
+            self.translate(0, -self.step_delta_constant, 0)
+        elif mod == wx.MOD_SHIFT and key == wx.WXK_DOWN:
+            self.translate(0, self.step_delta_constant, 0)
+        elif mod == wx.MOD_CONTROL:
+            if key == wx.WXK_RIGHT:
+                self.rotate_y(self.step_deg_constant)
+            elif key == wx.WXK_LEFT:
+                self.rotate_y(-self.step_deg_constant)
+            elif key == wx.WXK_UP:
+                self.rotate_x(self.step_deg_constant)
+            elif key == wx.WXK_DOWN:
+                self.rotate_x(-self.step_deg_constant)
+        elif mod == wx.MOD_CONTROL | wx.MOD_SHIFT and key == wx.WXK_RIGHT:
+            self.rotate_z(self.step_deg_constant)
+        elif mod == wx.MOD_CONTROL | wx.MOD_SHIFT and key == wx.WXK_LEFT:
+            self.rotate_z(-self.step_deg_constant)
 
     def on_size(self, evt):
         self.Refresh()
@@ -60,17 +95,6 @@ class Camera(wx.Panel):
         bmp = wx.Bitmap.FromBuffer(w, h, data)
         return bmp
 
-    def translate(self, delta_x: float, delta_y: float, delta_z: float) -> None:
-        """
-        Translate the camera by a given delta.
-
-        :param delta_x: Delta amount to translate the X coordinate.
-        :param delta_y: Delta amount to translate the Y coordinate.
-        :param delta_z: Delta amount to translate the Z coordinate.
-        """
-
-        self.look_at = Transforms.translate(self.look_at, delta_x, delta_y, delta_z)
-
     def rotate_x(self, deg: float) -> None:
         """
         Rotate the camera by a given angle in degrees around X axis.
@@ -97,3 +121,14 @@ class Camera(wx.Panel):
         """
 
         self.look_at = Transforms.rotate_z(self.look_at, math.radians(deg))
+
+    def translate(self, delta_x: float, delta_y: float, delta_z: float) -> None:
+        """
+        Translate the camera by a given delta.
+
+        :param delta_x: Delta amount to translate the X coordinate.
+        :param delta_y: Delta amount to translate the Y coordinate.
+        :param delta_z: Delta amount to translate the Z coordinate.
+        """
+
+        self.look_at = Transforms.translate(self.look_at, delta_x, delta_y, delta_z)
