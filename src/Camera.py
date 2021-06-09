@@ -38,6 +38,7 @@ class Camera(wx.Panel):
         self.step_deg_constant = 1
 
     def key_down(self, evt):
+        re_render = True
         mod = evt.GetModifiers()
         key = evt.GetKeyCode()
 
@@ -50,6 +51,8 @@ class Camera(wx.Panel):
                 self.translate(0, 0, self.step_delta_constant)
             elif key == wx.WXK_DOWN:
                 self.translate(0, 0, -self.step_delta_constant)
+            else:
+                re_render = False
         elif mod == wx.MOD_SHIFT and key == wx.WXK_UP:
             self.translate(0, -self.step_delta_constant, 0)
         elif mod == wx.MOD_SHIFT and key == wx.WXK_DOWN:
@@ -63,10 +66,17 @@ class Camera(wx.Panel):
                 self.rotate_x(self.step_deg_constant)
             elif key == wx.WXK_DOWN:
                 self.rotate_x(-self.step_deg_constant)
+            else:
+                re_render = False
         elif mod == wx.MOD_CONTROL | wx.MOD_SHIFT and key == wx.WXK_RIGHT:
             self.rotate_z(self.step_deg_constant)
         elif mod == wx.MOD_CONTROL | wx.MOD_SHIFT and key == wx.WXK_LEFT:
             self.rotate_z(-self.step_deg_constant)
+        else:
+            re_render = False
+
+        if re_render:
+            self.Refresh()
 
     def on_size(self, evt):
         self.Refresh()
