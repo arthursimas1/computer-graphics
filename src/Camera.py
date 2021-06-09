@@ -7,20 +7,21 @@ import math
 class Camera(wx.Panel):
     count = 0
 
-    def __init__(self, frame, scene):
+    def __init__(self, scene):
         """
         Camera constructor.
 
-        :param frame: wx.Frame instance to insert a wx.Panel.
         :param scene: Scene instance where the camera should be placed.
         """
 
         Camera.count += 1
         self.id = Camera.count
 
+        frame = wx.Frame(None, title=f'Computer Graphics Test (Scene {scene.id}, Camera {self.id})')
         wx.Panel.__init__(self, frame)
         self.Bind(wx.EVT_PAINT, self.on_paint)
         self.Bind(wx.EVT_SIZE, self.on_size)
+        frame.Show()
 
         self.scene = scene
         self.position = np.array([[0.],
