@@ -7,19 +7,20 @@ if __name__ == '__main__':
     s2 = Scene()
 
     obj1 = Object('./3d-obj-examples/coarseTri.fandiskAuto.obj')
-    obj1.translate(1, 0, 0)
-    obj1.scale(50)
+    obj1.translate(-0.5, 0, 0)
+    obj1.scale(100)
     s1.add_object(obj1)
 
     obj2 = Object('./3d-obj-examples/coarseTri.egea1.obj')
-    obj2.translate(2, -1, 0)
-    obj2.scale(50)
-    obj2.rotate_y(-45)
+    obj2.translate(0.5, 0, 0)
+    obj2.scale(100)
     s1.add_object(obj2)
 
     obj3 = Object('./3d-obj-examples/coarseTri.rockerArm.obj')
-    obj3.scale(50)
-    obj3.rotate_y(60)
+    obj3.scale(100)
+    obj3.rotate_y(90)
+    obj3.rotate_x(30)
+    # obj3.translate(50, 50, 0)
     s2.add_object(obj3)
 
     cam1 = Camera(s1)

@@ -31,10 +31,6 @@ class Object:
         self.vertexes = []
         self.faces = []
 
-        # Finds the largest axis and divide all the axes by it
-        # max{ (xmax-xmin), (ymax-ymin), (zmax-zmin) }
-        # 1/max
-
         x_max = float('-inf')
         x_min = float('inf')
 
@@ -56,21 +52,21 @@ class Object:
                     x_max = max(x_max, x)
                     x_min = min(x_min, x)
 
-                    y_max = max(x_max, y)
+                    y_max = max(y_max, y)
                     y_min = min(y_min, y)
 
-                    z_max = max(x_max, z)
+                    z_max = max(z_max, z)
                     z_min = min(z_min, z)
 
                     self.vertexes.append(np.array([[x], [y], [z], [1]]))
                 elif line_type == 'f':
                     self.faces.append(list(map(lambda f: int(f) - 1, elements)))
 
-        print(path, x_max - x_min, y_max - y_min, z_max - z_min, max(x_max - x_min, y_max - y_min, z_max - z_min))
-        print(self.transformation_matrix)
-        self.scale(2 / max(x_max - x_min, y_max - y_min, z_max - z_min))
-        self.translate(-1., -1., -1.)
-        print(self.transformation_matrix)
+        # center around the coordinate (0, 0, 0)
+        self.translate(-(x_max + x_min) / 2, -(y_max + y_min) / 2, -(z_max + z_min) / 2)
+
+        # normalize the axes in the range [-0.5, 0.5]
+        self.scale(1 / max(x_max - x_min, y_max - y_min, z_max - z_min))
 
     def copy(self) -> 'Object':
         """
