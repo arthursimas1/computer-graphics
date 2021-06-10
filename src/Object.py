@@ -31,18 +31,46 @@ class Object:
         self.vertexes = []
         self.faces = []
 
+        # Finds the largest axis and divide all the axes by it
+        # max{ (xmax-xmin), (ymax-ymin), (zmax-zmin) }
+        # 1/max
+
+        x_max = float('-inf')
+        x_min = float('inf')
+
+        y_max = float('-inf')
+        y_min = float('inf')
+
+        z_max = float('-inf')
+        z_min = float('inf')
+
         with open(path, 'r') as fp:
             for line in fp.readlines():
                 line_type, *elements = line.split()
 
                 if line_type == 'v':
-                    np_vertex = np.array([[float(elements[0])],
-                                          [float(elements[1])],
-                                          [float(elements[2])],
-                                          [1]])
-                    self.vertexes.append(np_vertex)
+                    x = float(elements[0])
+                    y = float(elements[1])
+                    z = float(elements[2])
+
+                    x_max = max(x_max, x)
+                    x_min = min(x_min, x)
+
+                    y_max = max(x_max, y)
+                    y_min = min(y_min, y)
+
+                    z_max = max(x_max, z)
+                    z_min = min(z_min, z)
+
+                    self.vertexes.append(np.array([[x], [y], [z], [1]]))
                 elif line_type == 'f':
-                    self.faces.append(list(map(lambda x: int(x) - 1, elements)))
+                    self.faces.append(list(map(lambda f: int(f) - 1, elements)))
+
+        print(path, x_max - x_min, y_max - y_min, z_max - z_min, max(x_max - x_min, y_max - y_min, z_max - z_min))
+        print(self.transformation_matrix)
+        self.scale(2 / max(x_max - x_min, y_max - y_min, z_max - z_min))
+        self.translate(-1., -1., -1.)
+        print(self.transformation_matrix)
 
     def copy(self) -> 'Object':
         """
@@ -56,15 +84,6 @@ class Object:
         new_obj.faces = self.faces
 
         return new_obj
-
-    def scale(self, factor: float) -> None:
-        """
-        Scale the object by a given factor.
-
-        :param factor: Scaling factor.
-        """
-
-        self.transformation_matrix = Transforms.scale(self.transformation_matrix, factor)
 
     def rotate_x(self, deg: float) -> None:
         """
@@ -92,3 +111,23 @@ class Object:
         """
 
         self.transformation_matrix = Transforms.rotate_z(self.transformation_matrix, math.radians(deg))
+
+    def scale(self, factor: float) -> None:
+        """
+        Scale the object by a given factor.
+
+        :param factor: Scaling factor.
+        """
+
+        self.transformation_matrix = Transforms.scale(self.transformation_matrix, factor, factor, factor)
+
+    def translate(self, delta_x: float, delta_y: float, delta_z: float) -> None:
+        """
+        Translate the object by a given delta.
+
+        :param delta_x: Delta amount to translate the X coordinate.
+        :param delta_y: Delta amount to translate the Y coordinate.
+        :param delta_z: Delta amount to translate the Z coordinate.
+        """
+
+        self.transformation_matrix = Transforms.translate(self.transformation_matrix, delta_x, delta_y, delta_z)
