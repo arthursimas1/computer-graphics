@@ -20,7 +20,6 @@ if __name__ == '__main__':
     obj3.scale(100)
     obj3.rotate_y(90)
     obj3.rotate_x(30)
-    # obj3.translate(50, 50, 0)
     s2.add_object(obj3)
 
     cam1 = Camera(s1)

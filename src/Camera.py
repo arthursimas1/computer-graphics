@@ -52,9 +52,9 @@ class Camera(wx.Panel):
             else:
                 re_render = False
         elif mod == wx.MOD_SHIFT and key == wx.WXK_UP:
-            self.translate(0, -self.step_delta_constant, 0)
-        elif mod == wx.MOD_SHIFT and key == wx.WXK_DOWN:
             self.translate(0, self.step_delta_constant, 0)
+        elif mod == wx.MOD_SHIFT and key == wx.WXK_DOWN:
+            self.translate(0, -self.step_delta_constant, 0)
         elif mod == wx.MOD_CONTROL:
             if key == wx.WXK_RIGHT:
                 self.rotate_y(self.step_deg_constant)
@@ -92,7 +92,7 @@ class Camera(wx.Panel):
 
     def generate_bitmap(self, w, h):
         z_buffer = np.full((h, w), float('inf'), np.uint8)
-        data = np.zeros((h, w, 3), np.uint8)  # data[Y][X] = [R, G, B]
+        data = np.full((h, w, 3), 0, np.uint8)  # data[Y][X] = [R, G, B]
 
         for obj in self.scene.objects:
             trans = np.matmul(self.view_transformation, obj.transformation_matrix)
@@ -102,7 +102,7 @@ class Camera(wx.Panel):
                     x, y, z, *_ = np.matmul(trans, obj.vertexes[vertex])
 
                     if False or (0 < round(x[0]) < w and 0 < round(y[0]) < h):
-                        data[round(y[0])][round(x[0])] = [obj.solid_color.red, obj.solid_color.green, obj.solid_color.blue]
+                        data[h - round(y[0])][round(x[0])] = [obj.solid_color.red, obj.solid_color.green, obj.solid_color.blue]
 
         return wx.Bitmap.FromBuffer(w, h, data)
 
@@ -113,7 +113,7 @@ class Camera(wx.Panel):
         :param deg: Degrees to rotate the camera.
         """
 
-        self.view_transformation = Transforms.rotate_x(self.view_transformation, math.radians(deg))
+        self.view_transformation = Transforms.rotate_x(self.view_transformation, -math.radians(deg))
 
     def rotate_y(self, deg: float) -> None:
         """
@@ -122,7 +122,7 @@ class Camera(wx.Panel):
         :param deg: Degrees to rotate the camera.
         """
 
-        self.view_transformation = Transforms.rotate_y(self.view_transformation, math.radians(deg))
+        self.view_transformation = Transforms.rotate_y(self.view_transformation, -math.radians(deg))
 
     def rotate_z(self, deg: float) -> None:
         """
@@ -131,7 +131,7 @@ class Camera(wx.Panel):
         :param deg: Degrees to rotate the camera.
         """
 
-        self.view_transformation = Transforms.rotate_z(self.view_transformation, math.radians(deg))
+        self.view_transformation = Transforms.rotate_z(self.view_transformation, -math.radians(deg))
 
     def translate(self, delta_x: float, delta_y: float, delta_z: float) -> None:
         """
