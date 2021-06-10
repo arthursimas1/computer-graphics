@@ -71,7 +71,7 @@ def rotate_z(vertex, rad: float):
     return np.matmul(trans_matrix, vertex)
 
 
-def scale(vertex, factor: float):
+def scale(vertex, factor_x: float, factor_y: float, factor_z: float):
     """
     Scale each vertex coordinate by a given factor.
 
@@ -81,17 +81,17 @@ def scale(vertex, factor: float):
      [        0,         0, factor_z, 0 ],
      [        0,         0,        0, 1 ]]
 
-    In this case, `factor_[x,y,z]` are all the same (`factor`).
-
     :param vertex: Vertex to be transformed.
-    :param factor: Scaling factor.
+    :param factor_x: Scaling factor for the X coordinate.
+    :param factor_y: Scaling factor for the Y coordinate.
+    :param factor_z: Scaling factor for the Z coordinate.
     :return: Vertex after scaling.
     """
 
-    trans_matrix = np.array([[factor,       0,      0, 0],
-                             [     0,  factor,      0, 0],
-                             [     0,       0, factor, 0],
-                             [     0,       0,      0, 1]])
+    trans_matrix = np.array([[factor_x,         0,        0, 0],
+                             [       0,  factor_y,        0, 0],
+                             [       0,         0, factor_z, 0],
+                             [       0,         0,        0, 1]])
 
     return np.matmul(trans_matrix, vertex)
 
