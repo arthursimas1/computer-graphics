@@ -2,10 +2,11 @@ from typing import Optional
 import numpy as np
 import math
 import Transforms
+import webcolors
 
 
 class Object:
-    def __init__(self, path: Optional[str] = None):
+    def __init__(self, path: Optional[str] = None, solid_color: Optional[str] = '#ffffff'):
         """
         3D Object constructor.
 
@@ -14,6 +15,8 @@ class Object:
 
         self.vertexes = []
         self.faces = []
+        self.path = path
+        self.solid_color = webcolors.html5_parse_simple_color(solid_color)
         self.transformation_matrix = np.array([[1., 0., 0., 0.],
                                                [0., 1., 0., 0.],
                                                [0., 0., 1., 0.],
@@ -30,6 +33,7 @@ class Object:
         """
         self.vertexes = []
         self.faces = []
+        self.path = path
 
         x_max = float('-inf')
         x_min = float('inf')

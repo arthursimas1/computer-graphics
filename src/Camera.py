@@ -25,15 +25,13 @@ class Camera(wx.Panel):
         frame.Show()
 
         self.scene = scene
-        self.position = np.array([[0.],
-                                  [0.],
-                                  [0.],
-                                  [1.]])
-        self.look_at = np.array([[1., 0., 0., 0.],
-                                 [0., 1., 0., 0.],
-                                 [0., 0., 1., 0.],
-                                 [0., 0., 0., 1.]])
+        self.view_transformation = np.array([[1., 0., 0., 0.],
+                                             [0., 1., 0., 0.],
+                                             [0., 0., 1., 0.],
+                                             [0., 0., 0., 1.]])
 
+        self.bmp = None
+        self.update_bmp = True
         self.step_delta_constant = 10
         self.step_deg_constant = 1
 
@@ -76,34 +74,37 @@ class Camera(wx.Panel):
             re_render = False
 
         if re_render:
+            self.update_bmp = True
             self.Refresh()
 
     def on_size(self, evt):
+        self.update_bmp = True
         self.Refresh()
 
     def on_paint(self, evt):
         w, h = self.GetClientSize()
         dc = wx.PaintDC(self)
         dc.Clear()
-        bmp = self.get_bitmap(w, h)
-        dc.DrawBitmap(bmp, 0, 0)
+        if self.update_bmp:
+            self.bmp = self.generate_bitmap(w, h)
+            self.update_bmp = False
+        dc.DrawBitmap(self.bmp, 0, 0)
 
-    def get_bitmap(self, w, h):
-        data = np.zeros((h, w, 3), np.uint8)
+    def generate_bitmap(self, w, h):
+        z_buffer = np.full((h, w), float('inf'), np.uint8)
+        data = np.zeros((h, w, 3), np.uint8)  # data[Y][X] = [R, G, B]
 
         for obj in self.scene.objects:
-            vt = []
-            for i in range(len(obj.vertexes)):
-                vt.append(np.matmul(self.look_at, np.matmul(obj.transformation_matrix, obj.vertexes[i])))
+            trans = np.matmul(self.view_transformation, obj.transformation_matrix)
 
-            vt.sort(key=lambda v: v[2][0])
+            for triangle in obj.faces:
+                for vertex in triangle:
+                    x, y, z, *_ = np.matmul(trans, obj.vertexes[vertex])
 
-            for v in vt:
-                # data[Y][X]
-                data[round(v[1][0])][round(v[0][0])] = min(round(v[2][0]), 255)
+                    if False or (0 < round(x[0]) < w and 0 < round(y[0]) < h):
+                        data[round(y[0])][round(x[0])] = [obj.solid_color.red, obj.solid_color.green, obj.solid_color.blue]
 
-        bmp = wx.Bitmap.FromBuffer(w, h, data)
-        return bmp
+        return wx.Bitmap.FromBuffer(w, h, data)
 
     def rotate_x(self, deg: float) -> None:
         """
@@ -112,7 +113,7 @@ class Camera(wx.Panel):
         :param deg: Degrees to rotate the camera.
         """
 
-        self.look_at = Transforms.rotate_x(self.look_at, math.radians(deg))
+        self.view_transformation = Transforms.rotate_x(self.view_transformation, math.radians(deg))
 
     def rotate_y(self, deg: float) -> None:
         """
@@ -121,7 +122,7 @@ class Camera(wx.Panel):
         :param deg: Degrees to rotate the camera.
         """
 
-        self.look_at = Transforms.rotate_y(self.look_at, math.radians(deg))
+        self.view_transformation = Transforms.rotate_y(self.view_transformation, math.radians(deg))
 
     def rotate_z(self, deg: float) -> None:
         """
@@ -130,7 +131,7 @@ class Camera(wx.Panel):
         :param deg: Degrees to rotate the camera.
         """
 
-        self.look_at = Transforms.rotate_z(self.look_at, math.radians(deg))
+        self.view_transformation = Transforms.rotate_z(self.view_transformation, math.radians(deg))
 
     def translate(self, delta_x: float, delta_y: float, delta_z: float) -> None:
         """
@@ -141,4 +142,4 @@ class Camera(wx.Panel):
         :param delta_z: Delta amount to translate the Z coordinate.
         """
 
-        self.look_at = Transforms.translate(self.look_at, delta_x, delta_y, delta_z)
+        self.view_transformation = Transforms.translate(self.view_transformation, -delta_x, -delta_y, -delta_z)
