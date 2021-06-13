@@ -91,18 +91,23 @@ class Camera(wx.Panel):
         dc.DrawBitmap(self.bmp, 0, 0)
 
     def generate_bitmap(self, w, h):
-        z_buffer = np.full((h, w), float('inf'), np.uint8)
-        data = np.full((h, w, 3), 0, np.uint8)  # data[Y][X] = [R, G, B]
+        z_buffer = np.full((h, w), float('inf'), np.float64)
+        data = np.full((h, w, 3), 0, np.uint8)  # data[Y][X] = (R, G, B)
 
         for obj in self.scene.objects:
             trans = np.matmul(self.view_transformation, obj.transformation_matrix)
 
             for triangle in obj.faces:
                 for vertex in triangle:
-                    x, y, z, *_ = np.matmul(trans, obj.vertexes[vertex])
+                    x_arr, y_arr, z_arr, *_ = np.matmul(trans, obj.vertexes[vertex])
 
-                    if False or (0 < round(x[0]) < w and 0 < round(y[0]) < h):
-                        data[h - round(y[0])][round(x[0])] = [obj.solid_color.red, obj.solid_color.green, obj.solid_color.blue]
+                    x = round(x_arr[0])
+                    y = h - round(y_arr[0])
+                    z = z_arr[0]
+
+                    if 0 < x < w and 0 < y < h and z_buffer[y][x] > z:
+                        z_buffer[y][x] = z
+                        data[y][x] = (obj.solid_color.red, obj.solid_color.green, obj.solid_color.blue)
 
         return wx.Bitmap.FromBuffer(w, h, data)
 

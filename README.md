@@ -2,7 +2,7 @@
 Some experiments about computer graphics.
 
 It implements a Camera, Object, Scene and some transformation functions. The Camera windowing system is based on
-wxPython.
+*wxPython*.
 
 <p align="center">
   <img src="static/demo-screenshot.png" width="40%">
@@ -90,7 +90,7 @@ You can interact with each Camera using the following commands:
 - [x] Reading at least one 3D object
 - [x] Resizing and positioning of the objects in a virtual scene
 - [x] Camera
-- [ ] Z-buffer
+- [x] Z-buffer
 - [ ] Projection
 - [ ] Object rendering (currently draws vertexes instead of the faces)
 - [x] Export or view the rendered scene
