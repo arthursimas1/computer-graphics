@@ -2,7 +2,7 @@ import wx
 import numpy as np
 import Transforms
 import math
-
+from Rasterization import draw_triangle
 
 class Camera(wx.Panel):
     count = 0
@@ -98,7 +98,11 @@ class Camera(wx.Panel):
             trans = np.matmul(self.view_transformation, obj.transformation_matrix)
 
             for triangle in obj.faces:
-                for vertex in triangle:
+                v1 = np.matmul(trans, obj.vertexes[triangle[0]])
+                v2 = np.matmul(trans, obj.vertexes[triangle[1]])
+                v3 = np.matmul(trans, obj.vertexes[triangle[2]])
+                draw_triangle(data, z_buffer, (h, w), [v1, v2, v3], obj.solid_color)
+                '''for vertex in triangle:
                     x_arr, y_arr, z_arr, *_ = np.matmul(trans, obj.vertexes[vertex])
 
                     x = round(x_arr[0])
@@ -107,7 +111,7 @@ class Camera(wx.Panel):
 
                     if 0 < x < w and 0 < y < h and z_buffer[y][x] > z:
                         z_buffer[y][x] = z
-                        data[y][x] = (obj.solid_color.red, obj.solid_color.green, obj.solid_color.blue)
+                        data[y][x] = (obj.solid_color.red, obj.solid_color.green, obj.solid_color.blue)'''
 
         return wx.Bitmap.FromBuffer(w, h, data)
 
