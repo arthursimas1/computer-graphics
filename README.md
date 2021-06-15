@@ -1,7 +1,7 @@
 # computer-graphics
 Some experiments about computer graphics.
 
-It implements a Camera, Object, Scene and some transformation functions. The Camera windowing system is based on
+It implements a Camera, Object, Scene, and some rendering and transformation functions. The Camera windowing system is based on
 *wxPython*.
 
 <p align="center">
@@ -9,25 +9,36 @@ It implements a Camera, Object, Scene and some transformation functions. The Cam
   <br><em>Demo using two scenes, Scene 1 with two cameras and Scene 2 with just one camera.</em>
 </p>
 
-## requirements.txt:
-- [numpy==1.20](https://pypi.org/project/numpy/1.20.0/): uses `np.array`, `np.full` and `p.matmul`;
-- [webcolors==1.11](https://pypi.org/project/webcolors/1.11/): converts HEX code to RGB;
-- [wxPython==4.1](https://pypi.org/project/wxPython/4.1.0/): windowing system which provides a bitmap canvas to freely
-  draw.
 
-## Installation
+## Dependencies
+- [numpy 1.20](https://pypi.org/project/numpy/1.20.0/): used for `np.array`, `np.full` and `p.matmul`;
+- [webcolors 1.11](https://pypi.org/project/webcolors/1.11/): converts HEX code to RGB;
+- [wxPython 4.1](https://pypi.org/project/wxPython/4.1.0/): windowing system which provides a bitmap canvas to freely
+  draw into, besides a plenty of useful features.
 
-Usually one can just run the following command and get it ready:
+The easiest method to install the requirements is thought a Python environment managed by Conda or Anaconda. If you 
+don't have one setup, we recommend using [miniconda](https://docs.conda.io/en/latest/miniconda.html) because it's 
+a minimal installer for conda that includes only conda, Python and a few other utility packages.
+
+After setting up your Conda installation, run the following commands:
 
 ```shell
-$ pip3 install -r requirements.txt
+# create a Python environment called `cg`
+conda create -n cg
+
+# entering the newly created environment
+conda activate cg
+
+# installing the requirements
+conda install -c conda-forge numpy=1.20 webcolors=1.11 wxpython=4.1
 ```
 
-But if you encounter any error, it probably might be related to *wxPython*, as there's no wheels available for each 
-platform. Some alternatives are using conda/anaconda distribution, 
+> 💡 You can install each dependency by hand using *pip*, but it's a more complicated process involving compiling 
+> *wxPython* specifically for your platform. That's out of the scope of this guide, so read 
+> [this](https://wxpython.org/pages/downloads/) page for more information.
+
 
 ## Usage
-
 Usage as in [src/main.py](src/main.py):
 
 ```python3
@@ -69,8 +80,19 @@ if __name__ == '__main__':
     Scene.main_loop()
 ```
 
-It can be simply run as `python3 src/main.py`. To terminate the execution you can close all windows one by one or hit 
-`CTRL + C` on the terminal.
+
+## Running
+After installing the requirements, you need to `cd` to the project root then activate your Python environment:
+
+```shell
+conda activate cg
+```
+
+If you see `(cg)` at the beginning of the command line, you're ready to go. Run the project using the command:
+
+```shell
+python3 src/main.py
+```
 
 You can interact with each Camera using the following commands:
 - `RIGHT`: right (`translate(C, 0, 0)`)
@@ -85,6 +107,20 @@ You can interact with each Camera using the following commands:
 - `CTRL + DOWN`: negative roll (`rotate_x(-D)`)
 - `CTRL + SHIFT + RIGHT`: positive yaw (`rotate_z(D)`)
 - `CTRL + SHIFT + LEFT`: negative yaw (`rotate_z(-D)`)
+
+To terminate the execution you can close all windows one by one or hit `CTRL + C` on the terminal.
+
+
+## Troubleshooting
+If you encounter any error, it probably might be related to *wxPython* and it's dependencies:
+
+- ``ImportError: /path/to/miniconda3/envs/cg/bin/../lib/libstdc++.so.6: version `CXXABI_1.3.13' not found 
+  (required by /path/to/python3.9/site-packages/wx/libwx_baseu-3.1.so.5)``: it means that there's a wxPython installed 
+  within your main Python install. You can uninstall it (`pip uninstall wxpython`) and try to run again;
+- `Gtk-Message: 18:21:48.703: Failed to load module "canberra-gtk-module"` and `Gtk-Message: 18:21:48.703: Failed to 
+  load module "pk-gtk-module"`: as this project doesn't use features provided by these modules, they're not needed. This 
+  error can be safely ignored.
+
 
 ## TODO
 - [x] Reading at least one 3D object
