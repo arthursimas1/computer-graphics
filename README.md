@@ -101,12 +101,12 @@ You can interact with each Camera using the following commands:
 - `DOWN`: back (`translate(0, 0, -C)`)
 - `SHIFT + UP`: up (`translate(0, C, 0)`)
 - `SHIFT + DOWN`: down (`translate(0, -C, 0)`)
-- `CTRL + RIGHT`: positive pitch (`rotate_y(D)`)
-- `CTRL + LEFT`: negative pitch (`rotate_y(-D)`)
-- `CTRL + UP`: positive roll (`rotate_x(D)`)
-- `CTRL + DOWN`: negative roll (`rotate_x(-D)`)
-- `CTRL + SHIFT + RIGHT`: positive yaw (`rotate_z(D)`)
-- `CTRL + SHIFT + LEFT`: negative yaw (`rotate_z(-D)`)
+- `CTRL + RIGHT`: positive yaw (`rotate_y(-D)`)
+- `CTRL + LEFT`: negative yaw (`rotate_y(D)`)
+- `CTRL + UP`: positive pitch (`rotate_x(-D)`)
+- `CTRL + DOWN`: negative pitch (`rotate_x(D)`)
+- `CTRL + SHIFT + RIGHT`: positive roll (`rotate_z(-D)`)
+- `CTRL + SHIFT + LEFT`: negative roll (`rotate_z(D)`)
 
 To terminate the execution you can close all windows one by one or hit `CTRL + C` on the terminal.
 

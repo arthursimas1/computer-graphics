@@ -57,19 +57,19 @@ class Camera(wx.Panel):
             self.translate(0, -self.step_delta_constant, 0)
         elif mod == wx.MOD_CONTROL:
             if key == wx.WXK_RIGHT:
-                self.rotate_y(self.step_deg_constant)
-            elif key == wx.WXK_LEFT:
                 self.rotate_y(-self.step_deg_constant)
+            elif key == wx.WXK_LEFT:
+                self.rotate_y(self.step_deg_constant)
             elif key == wx.WXK_UP:
-                self.rotate_x(self.step_deg_constant)
-            elif key == wx.WXK_DOWN:
                 self.rotate_x(-self.step_deg_constant)
+            elif key == wx.WXK_DOWN:
+                self.rotate_x(self.step_deg_constant)
             else:
                 re_render = False
         elif mod == wx.MOD_CONTROL | wx.MOD_SHIFT and key == wx.WXK_RIGHT:
-            self.rotate_z(self.step_deg_constant)
-        elif mod == wx.MOD_CONTROL | wx.MOD_SHIFT and key == wx.WXK_LEFT:
             self.rotate_z(-self.step_deg_constant)
+        elif mod == wx.MOD_CONTROL | wx.MOD_SHIFT and key == wx.WXK_LEFT:
+            self.rotate_z(self.step_deg_constant)
         else:
             re_render = False
 
@@ -122,7 +122,7 @@ class Camera(wx.Panel):
         :param deg: Degrees to rotate the camera.
         """
 
-        self.view_transformation = Transforms.rotate_x(self.view_transformation, -math.radians(deg))
+        self.view_transformation = Transforms.rotate_x(self.view_transformation, math.radians(-deg))
 
     def rotate_y(self, deg: float) -> None:
         """
@@ -131,7 +131,7 @@ class Camera(wx.Panel):
         :param deg: Degrees to rotate the camera.
         """
 
-        self.view_transformation = Transforms.rotate_y(self.view_transformation, -math.radians(deg))
+        self.view_transformation = Transforms.rotate_y(self.view_transformation, math.radians(-deg))
 
     def rotate_z(self, deg: float) -> None:
         """
@@ -140,7 +140,7 @@ class Camera(wx.Panel):
         :param deg: Degrees to rotate the camera.
         """
 
-        self.view_transformation = Transforms.rotate_z(self.view_transformation, -math.radians(deg))
+        self.view_transformation = Transforms.rotate_z(self.view_transformation, math.radians(-deg))
 
     def translate(self, delta_x: float, delta_y: float, delta_z: float) -> None:
         """
