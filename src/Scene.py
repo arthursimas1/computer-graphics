@@ -1,3 +1,4 @@
+from typing import Optional
 import wx
 
 
@@ -5,7 +6,7 @@ class Scene:
     count = 0
     wx_app = None
 
-    def __init__(self, ambient_light_intensity: float):
+    def __init__(self, k_ambient: Optional[float] = 1.):
         """
         Scene constructor.
         """
@@ -15,7 +16,7 @@ class Scene:
 
         self.objects = []
         self.light_sources = []
-        self.ambient_light_intensity = ambient_light_intensity
+        self.k_ambient = k_ambient
 
         if not Scene.wx_app:
             Scene.wx_app = wx.App()

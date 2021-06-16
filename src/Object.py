@@ -6,7 +6,7 @@ import webcolors
 
 
 class Object:
-    def __init__(self, path: Optional[str] = None, solid_color: Optional[str] = '#ffffff'):
+    def __init__(self, path: Optional[str] = None, solid_color: Optional[str] = '#ffffff', k_diffuse: Optional[float] = 30., k_specular: Optional[float] = 5.):
         """
         3D Object constructor.
 
@@ -18,6 +18,8 @@ class Object:
         self.normals_of_faces = []
         self.path = path
         self.solid_color = webcolors.html5_parse_simple_color(solid_color)
+        self.k_diffuse = k_diffuse
+        self.k_specular = k_specular
         self.transformation_matrix = np.array([[1., 0., 0., 0.],
                                                [0., 1., 0., 0.],
                                                [0., 0., 1., 0.],
