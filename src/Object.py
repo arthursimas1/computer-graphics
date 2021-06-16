@@ -15,6 +15,7 @@ class Object:
 
         self.vertexes = []
         self.faces = []
+        self.normals_of_faces = []
         self.path = path
         self.solid_color = webcolors.html5_parse_simple_color(solid_color)
         self.transformation_matrix = np.array([[1., 0., 0., 0.],
@@ -33,6 +34,7 @@ class Object:
         """
         temp_vertexes = []
         self.faces = []
+        self.normals_of_faces = []
         self.path = path
 
         x_max = float('-inf')
@@ -72,6 +74,15 @@ class Object:
 
         # normalize the axes in the range [-0.5, 0.5]
         self.scale(1 / max(x_max - x_min, y_max - y_min, z_max - z_min))
+
+        # calculate each face normal
+        for triangle in self.faces:
+            v1 = self.vertexes[triangle[0]].flatten()[:-1]
+            v2 = self.vertexes[triangle[1]].flatten()[:-1]
+            v3 = self.vertexes[triangle[2]].flatten()[:-1]
+            normal = np.cross((v3 - v1), (v2 - v1))
+            normal /= np.linalg.norm(normal)
+            self.normals_of_faces.append(normal)
 
     def copy(self) -> 'Object':
         """
