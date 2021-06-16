@@ -1,10 +1,19 @@
 from Camera import Camera
 from Object import Object
 from Scene import Scene
+from LightSource import LightSource
 
 if __name__ == '__main__':
-    s1 = Scene()
-    s2 = Scene()
+    s1 = Scene(8)
+    s2 = Scene(15)
+
+    ls1 = LightSource([-1., -1., -1.], 50)
+    s1.add_light_source(ls1)
+
+    ls2 = LightSource([-5., -5., -5.], 50)
+    ls3 = LightSource([-10., -10., -10.], 100)
+    s2.add_light_source(ls2)
+    s2.add_light_source(ls3)
 
     obj1 = Object('./3d-obj-examples/coarseTri.fandiskAuto.obj', '#4070a0')
     obj1.translate(-0.5, 0, 0)
