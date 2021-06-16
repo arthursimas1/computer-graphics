@@ -95,9 +95,10 @@ class Camera(wx.Panel):
         z_buffer = np.full((h, w), float('inf'), np.float64)
         data = np.full((h, w, 3), 0, np.uint8)  # data[Y][X] = (R, G, B)
 
+        trans = Transforms.translate(self.view_transformation, w/2, h/2, 0)
         for obj in self.scene.objects:
-            trans = np.matmul(self.view_transformation, obj.transformation_matrix)
-            vertexes = np.matmul(trans, obj.vertexes).round(decimals=0).astype(int, copy=False)
+            trans_obj = np.matmul(trans, obj.transformation_matrix)
+            vertexes = np.matmul(trans_obj, obj.vertexes).round(decimals=0).astype(int, copy=False)
 
             for triangle in obj.faces:
                 v1 = vertexes[triangle[0]]

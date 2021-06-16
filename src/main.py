@@ -25,7 +25,7 @@ if __name__ == '__main__':
     cam1 = Camera(s1)
     cam1.rotate_y(45)
     cam1.rotate_z(45)
-    cam1.translate(-100, -100, 0)
+    #cam1.translate(-100, -100, 0)
 
     cam2 = Camera(s1)
     cam2.translate(-100, -100, 0)
