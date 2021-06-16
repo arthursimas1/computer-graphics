@@ -31,7 +31,7 @@ class Object:
 
         :param path: Filepath to an .obj 3D object.
         """
-        self.vertexes = []
+        temp_vertexes = []
         self.faces = []
         self.path = path
 
@@ -62,12 +62,11 @@ class Object:
                     z_max = max(z_max, z)
                     z_min = min(z_min, z)
 
-                    # FIXME: use a ndarray (n=3) to store each vertex in a matrix and perform maths all at once
-
-                    self.vertexes.append(np.array([[x], [y], [z], [1]]))
+                    temp_vertexes.append(np.array([[x], [y], [z], [1.]]))
                 elif line_type == 'f':
                     self.faces.append(list(map(lambda f: int(f) - 1, elements)))
 
+        self.vertexes = np.asarray(temp_vertexes, dtype=np.float64)
         # center around the coordinate (0, 0, 0)
         self.translate(-(x_max + x_min) / 2, -(y_max + y_min) / 2, -(z_max + z_min) / 2)
 

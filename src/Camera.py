@@ -4,6 +4,7 @@ import Transforms
 import math
 from Rasterization import draw_triangle
 
+
 class Camera(wx.Panel):
     count = 0
 
@@ -96,14 +97,12 @@ class Camera(wx.Panel):
 
         for obj in self.scene.objects:
             trans = np.matmul(self.view_transformation, obj.transformation_matrix)
-            # FIXME: when the vertexes be converted to a ndarray, copy it and
-            # apply ndarray.round to get the exact vertex position relative to the bitmap
-            # https://numpy.org/doc/stable/reference/generated/numpy.ndarray.round.html
+            vertexes = np.matmul(trans, obj.vertexes).round(decimals=0).astype(int, copy=False)
 
             for triangle in obj.faces:
-                v1 = np.matmul(trans, obj.vertexes[triangle[0]])
-                v2 = np.matmul(trans, obj.vertexes[triangle[1]])
-                v3 = np.matmul(trans, obj.vertexes[triangle[2]])
+                v1 = vertexes[triangle[0]]
+                v2 = vertexes[triangle[1]]
+                v3 = vertexes[triangle[2]]
                 draw_triangle(data, z_buffer, (h, w), [v1, v2, v3], obj.solid_color)
                 '''for vertex in triangle:
                     x_arr, y_arr, z_arr, *_ = np.matmul(trans, obj.vertexes[vertex])
