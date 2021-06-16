@@ -20,6 +20,9 @@ def fill_bottom_flat_triangle(graph, z_buffer, size, v1, v2, v3, color):
     slope1 = (v2[0][0] - v1[0][0]) / (v2[1][0] - v1[1][0])
     slope2 = (v3[0][0] - v1[0][0]) / (v3[1][0] - v1[1][0])
 
+    if math.fabs(slope1) > 5 or math.fabs(slope2) > 5:
+        return
+
     cur_x1 = v1[0][0]
     cur_x2 = v1[0][0]
     z = round(v1[2][0])
@@ -36,6 +39,9 @@ def fill_bottom_flat_triangle(graph, z_buffer, size, v1, v2, v3, color):
 def fill_top_flat_triangle(graph, z_buffer, size, v1, v2, v3, color):
     slope1 = (v3[0][0] - v1[0][0]) / (v3[1][0] - v1[1][0])
     slope2 = (v3[0][0] - v2[0][0]) / (v3[1][0] - v2[1][0])
+
+    if math.fabs(slope1) > 5 or math.fabs(slope2) > 5:
+        return
 
     cur_x1 = v3[0][0]
     cur_x2 = v3[0][0]
@@ -63,7 +69,7 @@ def draw_triangle(graph, z_buffer, size, triangle, color):
         v4 = np.array([[v1[0][0] + (v2[1][0] - v1[1][0]) / (v3[1][0] - v1[1][0]) * (v3[0][0] - v1[0][0])],
                        v2[1],
                        v2[2],  # FIXME: it should be interpolated as in X axis
-                       [0.]])
+                       [1.]])
 
         fill_bottom_flat_triangle(graph, z_buffer, size, v1, v2, v4, color)
         fill_top_flat_triangle(graph, z_buffer, size, v2, v4, v3, color)

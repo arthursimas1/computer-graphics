@@ -96,6 +96,9 @@ class Camera(wx.Panel):
 
         for obj in self.scene.objects:
             trans = np.matmul(self.view_transformation, obj.transformation_matrix)
+            # FIXME: when the vertexes be converted to a ndarray, copy it and
+            # apply ndarray.round to get the exact vertex position relative to the bitmap
+            # https://numpy.org/doc/stable/reference/generated/numpy.ndarray.round.html
 
             for triangle in obj.faces:
                 v1 = np.matmul(trans, obj.vertexes[triangle[0]])

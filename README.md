@@ -127,8 +127,11 @@ If you encounter any error, it probably might be related to *wxPython* and it's 
 - [x] Resizing and positioning of the objects in a virtual scene
 - [x] Camera
 - [x] Z-buffer
-- [ ] Projection
-- [ ] Object rendering (currently draws vertexes instead of the faces)
+- [x] Planar projection
+- [ ] Perspective projection
+- [x] Object rendering
+- [ ] Fix face rasterization: do maths using *ints* math not *floats*. FIX: [Camera.py](src/Camera.py#L99-L101), 
+  [Rasterization.py](src/Rasterization.py) and [Object.py](src/Object.py#L65)
 - [x] Export or view the rendered scene
 - [ ] Define at least one light source
 - [ ] Implement *Phong* and/or *Gouraud* shading techniques
