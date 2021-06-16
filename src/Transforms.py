@@ -1,4 +1,4 @@
-from math import cos, sin
+from math import cos, sin, pi
 import numpy as np
 
 
@@ -117,5 +117,32 @@ def translate(vertex, delta_x: float, delta_y: float, delta_z: float):
                              [0, 1, 0, delta_y],
                              [0, 0, 1, delta_z],
                              [0, 0, 0,       1]])
+
+    return np.matmul(trans_matrix, vertex)
+
+
+def perspective(vertex, fov: float, a: float, z_near: int, z_far: int):
+    """
+    Create a perspective view of a vertex.
+
+    Transformation matrix used:
+    [[1 / a * tan, 0, 0, 0],
+     [0, 1 / tan, 0, 0],
+     [0, 0, -(z_far + z_near) / (z_far - z_near), -(2 * z_far * z_near) / (z_far - z_near)],
+     [0, 0, -1, 0]]
+
+    :param vertex: Vertex to be transformed.
+    :param fov: field of view in radians.
+    :param a: width x height aspect ratio.
+    :param z_near: z-near cut plane.
+    :param z_far: z-far cut plane.
+    :return: Vertex after perspective transform.
+    """
+
+    tan = sin(fov * pi / 180)
+    trans_matrix = np.array([[1 / a * tan, 0, 0, 0],
+                             [0, 1 / tan, 0, 0],
+                             [0, 0, -(z_far + z_near) / (z_far - z_near), -(2 * z_far * z_near) / (z_far - z_near)],
+                             [0, 0, -1, 0]])
 
     return np.matmul(trans_matrix, vertex)
