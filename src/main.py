@@ -4,14 +4,14 @@ from Scene import Scene
 from LightSource import LightSource
 
 if __name__ == '__main__':
-    s1 = Scene(8)
-    s2 = Scene(15)
+    s1 = Scene(.1)
+    s2 = Scene(.4)
 
-    ls1 = LightSource([-1., -1., -1.], 50)
+    ls1 = LightSource([5_000., 5_000., -5_000.], 1.)
     s1.add_light_source(ls1)
 
-    ls2 = LightSource([-5., -5., -5.], 50)
-    ls3 = LightSource([-10., -10., -10.], 100)
+    ls2 = LightSource([-5., -5., -5.], 1.)
+    ls3 = LightSource([-10., -10., -10.], .5)
     s2.add_light_source(ls2)
     s2.add_light_source(ls3)
 

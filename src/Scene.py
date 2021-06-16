@@ -6,7 +6,7 @@ class Scene:
     count = 0
     wx_app = None
 
-    def __init__(self, k_ambient: Optional[float] = 1.):
+    def __init__(self, k_ambient: Optional[float] = .1):
         """
         Scene constructor.
         """
@@ -16,7 +16,7 @@ class Scene:
 
         self.objects = []
         self.light_sources = []
-        self.k_ambient = k_ambient
+        self.k_ambient = k_ambient; assert 0 <= k_ambient <= 1
 
         if not Scene.wx_app:
             Scene.wx_app = wx.App()

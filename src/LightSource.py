@@ -1,9 +1,10 @@
-from typing import List
+from typing import List, Optional
 import Transforms
+import numpy as np
 
 
 class LightSource:
-    def __init__(self, position: List[float], intensity: float):
+    def __init__(self, position: List[float], intensity: Optional[float] = 1.):
         """
         Light Source constructor.
 
@@ -11,8 +12,8 @@ class LightSource:
         :param intensity: Intensity constant.
         """
 
-        self.position = position
-        self.intensity = intensity
+        self.position = np.array(position)
+        self.intensity = intensity; assert 0 <= intensity <= 1
 
     def copy(self) -> 'LightSource':
         """
