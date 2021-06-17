@@ -11,7 +11,7 @@ It implements a Camera, Object, Scene, and some rendering and transformation fun
 
 
 ## Dependencies
-- [numpy 1.20](https://pypi.org/project/numpy/1.20.0/): used for `np.array`, `np.full` and `p.matmul`;
+- [numpy 1.20](https://pypi.org/project/numpy/1.20.0/): used `np.array`, `np.full`, `np.matmul`, `np.dot`, `np.cross` and `np.linalg.norm`;
 - [webcolors 1.11](https://pypi.org/project/webcolors/1.11/): converts HEX code to RGB;
 - [wxPython 4.1](https://pypi.org/project/wxPython/4.1.0/): windowing system which provides a bitmap canvas to freely
   draw into, besides a plenty of useful features.
@@ -45,37 +45,44 @@ Usage as in [src/main.py](src/main.py):
 from Camera import Camera
 from Object import Object
 from Scene import Scene
+from LightSource import LightSource
 
 if __name__ == '__main__':
-    s1 = Scene()
-    s2 = Scene()
+    s1 = Scene(.1)
+    s2 = Scene(.4)
+
+    ls1 = LightSource([5_000., 5_000., -5_000.], 1.)
+    s1.add_light_source(ls1)
+
+    ls2 = LightSource([5_000., 5_000., -5_000.], 1.)
+    ls3 = LightSource([-5_000., -5_000., -5_000.], .3)
+    s2.add_light_source(ls2)
+    s2.add_light_source(ls3)
 
     obj1 = Object('./3d-obj-examples/coarseTri.fandiskAuto.obj', '#4070a0')
     obj1.translate(-0.5, 0, 0)
-    obj1.scale(100)
+    obj1.scale(200)
     s1.add_object(obj1)
 
-    obj2 = Object('./3d-obj-examples/coarseTri.egea1.obj', '#e74c3c')
+    obj2 = Object('./3d-obj-examples/coarseTri.egea1.obj', '#e74c3c', .7, 1., 5)
     obj2.translate(0.5, 0, 0)
-    obj2.scale(100)
+    obj2.scale(200)
     s1.add_object(obj2)
 
-    obj3 = Object('./3d-obj-examples/coarseTri.rockerArm.obj', '#208050')
-    obj3.scale(100)
+    obj3 = Object('./3d-obj-examples/coarseTri.rockerArm.obj', '#208050', .3, 1., 5)
+    obj3.scale(200)
     obj3.rotate_y(90)
     obj3.rotate_x(30)
     s2.add_object(obj3)
 
     cam1 = Camera(s1)
-    cam1.rotate_y(45)
-    cam1.rotate_z(45)
-    cam1.translate(-100, -100, 0)
+    cam1.rotate_y(-50)
+    cam1.rotate_x(20)
 
     cam2 = Camera(s1)
-    cam2.translate(-100, -100, 0)
+    cam2.rotate_x(20)
 
     cam3 = Camera(s2)
-    cam3.translate(-100, -100, 10)
 
     Scene.main_loop()
 ```
@@ -132,6 +139,6 @@ If you encounter any error, it probably might be related to *wxPython* and it's 
 - [x] Object rendering
 - [ ] Fix face rasterization: do maths using *ints* not *floats*. FIX: [Rasterization.py](src/Rasterization.py)
 - [x] Export or view the rendered scene
-- [ ] Define at least one light source
-- [ ] Implement *Phong* and/or *Gouraud* shading techniques
+- [x] Define at least one light source
+- [-] Implement *Phong* and/or *Gouraud* shading techniques (*flat* shading implemented)
 - [ ] Export docstrings to Markdown documentation
