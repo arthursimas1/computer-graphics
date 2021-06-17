@@ -2,11 +2,10 @@ from typing import Optional
 import numpy as np
 import math
 import Transforms
-import webcolors
 
 
 class Object:
-    def __init__(self, path: Optional[str] = None, solid_color: Optional[str] = '#ffffff', k_diffuse: Optional[float] = 30., k_specular: Optional[float] = 5.):
+    def __init__(self, path: Optional[str] = None, hex_color: Optional[str] = '#ffffff', k_diffuse: Optional[float] = 1., k_specular: Optional[float] = .5, shininess: Optional[int] = 20):
         """
         3D Object constructor.
 
@@ -17,9 +16,10 @@ class Object:
         self.faces = []
         self.normals_of_faces = []
         self.path = path
-        self.solid_color = webcolors.html5_parse_simple_color(solid_color)
+        self.hex_color = hex_color
         self.k_diffuse = k_diffuse; assert 0 <= k_diffuse <= 1
         self.k_specular = k_specular; assert 0 <= k_specular <= 1
+        self.shininess = shininess
         self.transformation_matrix = np.array([[1., 0., 0., 0.],
                                                [0., 1., 0., 0.],
                                                [0., 0., 1., 0.],
@@ -96,6 +96,7 @@ class Object:
         new_obj = Object()
         new_obj.vertexes = self.vertexes
         new_obj.faces = self.faces
+        new_obj.normals_of_face = self.normals_of_faces
 
         return new_obj
 

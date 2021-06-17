@@ -2,7 +2,7 @@ import wx
 import numpy as np
 import Transforms
 import math
-from Rasterization import draw_triangle
+import Rasterization
 
 
 class Camera(wx.Panel):
@@ -92,29 +92,22 @@ class Camera(wx.Panel):
         dc.DrawBitmap(self.bmp, 0, 0)
 
     def generate_bitmap(self, w, h):
+        camera_coord = np.array(list(map(lambda x: -x[-1], self.view_transformation))[:3])
         z_buffer = np.full((h, w), float('inf'), np.float64)
         data = np.full((h, w, 3), 0, np.uint8)  # data[Y][X] = (R, G, B)
 
-        trans = Transforms.translate(self.view_transformation, w/2, h/2, 0)
+        trans = self.view_transformation
+        #trans = Transforms.perspective(trans, math.radians(90), w/h, 0, 1000)  # FIXME
+        trans = Transforms.translate(trans, w/2, h/2, 0)
+
         for obj in self.scene.objects:
             trans_obj = np.matmul(trans, obj.transformation_matrix)
             vertexes = np.matmul(trans_obj, obj.vertexes).round(decimals=0).astype(int, copy=False)
 
-            for triangle in obj.faces:
-                v1 = vertexes[triangle[0]]
-                v2 = vertexes[triangle[1]]
-                v3 = vertexes[triangle[2]]
-                draw_triangle(data, z_buffer, (h, w), [v1, v2, v3], obj.solid_color)
-                '''for vertex in triangle:
-                    x_arr, y_arr, z_arr, *_ = np.matmul(trans, obj.vertexes[vertex])
+            for triangle_index in range(len(obj.faces)):
+                Rasterization.draw_triangle_vertices(data, z_buffer, (h, w), camera_coord, obj, self.scene, vertexes, triangle_index)
 
-                    x = round(x_arr[0])
-                    y = h - round(y_arr[0])
-                    z = z_arr[0]
-
-                    if 0 < x < w and 0 < y < h and z_buffer[y][x] > z:
-                        z_buffer[y][x] = z
-                        data[y][x] = (obj.solid_color.red, obj.solid_color.green, obj.solid_color.blue)'''
+        print('done rendering')
 
         return wx.Bitmap.FromBuffer(w, h, data)
 
