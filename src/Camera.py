@@ -107,7 +107,7 @@ class Camera(wx.Panel):
             for triangle_index in range(len(obj.faces)):
                 Rasterization.draw_triangle_vertices(data, z_buffer, (h, w), camera_coord, obj, self.scene, vertexes, triangle_index)
 
-        print('done rendering')
+        print(f'Scene#{self.scene.id}, Camera#{self.id}: rendered')
 
         return wx.Bitmap.FromBuffer(w, h, data)
 

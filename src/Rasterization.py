@@ -116,7 +116,7 @@ def face_color(obj, scene, camera_coord, vertex, triangle_index):
     lightness = scene.k_ambient
 
     normal = obj.normals_of_faces[triangle_index]
-    camera_vector = vertex.flatten()[:-1] - camera_coord
+    camera_vector = camera_coord - vertex.flatten()[:-1]
 
     for ls in scene.light_sources:
         incidence_vector = vertex.flatten()[:-1] - ls.position
